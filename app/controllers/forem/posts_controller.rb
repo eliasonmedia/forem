@@ -5,9 +5,15 @@ module Forem
     before_filter :block_spammers, :only => [:new, :create]
 
     def new
-      authorize! :reply, @topic
-      @post = @topic.posts.build
-      @reply_to_post = @topic.posts.find_by_id(params[:reply_to_id])
+      unless forem_user.is_guest?
+        authorize! :reply, @topic
+        @post = @topic.posts.build
+        @reply_to_post = @topic.posts.find_by_id(params[:reply_to_id])
+      else
+        session[:return_to] = request.fullpath
+        flash[:notice] = "In order to post on Hub, you'll need to complete your registration."
+        redirect_to "/accounts/guest_registration"
+      end
 
       if params[:quote]
         @post.text = view_context.forem_quote(@reply_to_post.text)
