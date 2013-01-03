@@ -1,4 +1,4 @@
-require File.expand_path('../lib/forem-prod/version', __FILE__)
+require File.expand_path('../lib/forem/version', __FILE__)
 # Provide a simple gemspec so you can easily use your
 # project in your rails apps through git.
 Gem::Specification.new do |s|
